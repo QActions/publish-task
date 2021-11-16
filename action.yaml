@@ -1,0 +1,12 @@
+name: "Publish task"
+description: "Publishes a task to AWS Lambda"
+runs:
+  using: composite
+  steps:
+    - name: Publish task
+      run: |
+        # Package
+        zip build.zip -rqX build node_modules .env.example
+        # Deploy
+        aws lambda update-function-code --region $AWS_REGION --function-name $PROJECT_NAME --zip-file fileb://$PWD/build.zip > /dev/null
+      shell: bash
